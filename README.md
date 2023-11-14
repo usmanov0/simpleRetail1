@@ -12,7 +12,7 @@
 
 ### Run create migration file
 ```
- make migration-generate name=foobar’
+ make migration-generate name=foobar
 ```
 
 ### Run stop containers
