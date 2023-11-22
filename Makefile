@@ -3,20 +3,7 @@ export
 
 DOCKER_COMPOSE_FILE=docker-compose.yaml
 
-# proto
-.PHONY: proto-gen
-proto-gen:
-	./scripts/gen-proto.sh
 
-# git submodule init 	
-.PHONY: pull-proto
-pull-proto:
-	git submodule update --init --recursive
-
-# go generate	
-.PHONY: go-gen
-go-gen:
-	go generate ./...
 
 .PHONY: start
 start:
@@ -37,14 +24,17 @@ rm: stop
 	@echo "Remove Containers"
 	docker-compose -f ${DOCKER_COMPOSE_FILE} rm -v -f ${DOCKER_SERVICES}
 
-.PHONY: migration-up
-migration-up:
-	@echo "Migrations Up"
-	sleep 2
-	docker-compose run --rm migrate -path=migrations/ -database='postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?sslmode=disable' up
+.PHONY: migrate-generate
+migrate-generate:
+	@echo "Generating $(name) migrations..."
+	docker-compose run --rm migrate create -seq -ext=.sql -dir=./migrations $(name)
 
-.PHONY: migration-generate
-migration-generate:
-	@echo "Generation migration file $(name)"
-	sleep 2
-	docker-compose run --rm migrate create -ext sql -dir ./migrations -seq $(name)
+.PHONY: migrate-up
+migrate-up:
+	@echo "Migrating up..."
+	docker-compose run --rm migrate -path=./migrations -database='${PROJECT_DSN}' upS_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?sslmode=disable' up
+
+.PHONY: migrate-down
+migrate-down:
+	@echo "Migrating down..."
+	docker-compose run --rm migrate -path=./migrations -database='${PROJECT_DSN}' down

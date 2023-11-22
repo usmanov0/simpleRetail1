@@ -28,8 +28,11 @@ services:
       - donotstart
   db:
     image: postgres:latest
+    container_name: postgres
+    hostname: postgres
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: app_db
+      POSTGRES_DB: postgres
     ports:
       - "5432"
