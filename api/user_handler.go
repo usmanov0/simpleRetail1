@@ -7,11 +7,11 @@ import (
 	"text/template"
 )
 
-type UserController struct {
+type UserHandler struct {
 	UserService service.UserService
 }
 
-func (c *UserController) Profile(w http.ResponseWriter, r *http.Request) {
+func (c *UserHandler) Profile(w http.ResponseWriter, r *http.Request) {
 	principal, ok := r.Context().Value("user").(string)
 	if !ok {
 		http.Error(w, "User not found in context", http.StatusInternalServerError)
@@ -33,7 +33,7 @@ func (c *UserController) Profile(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (c *UserController) ProfilePost(w http.ResponseWriter, r *http.Request) {
+func (c *UserHandler) ProfilePost(w http.ResponseWriter, r *http.Request) {
 	var newUser model.Users
 	err := r.ParseForm()
 	if err != nil {
