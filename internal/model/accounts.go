@@ -40,3 +40,11 @@ func (a *AccountModel) DeleteAccount(ctx context.Context, id int) error {
 	_, err := a.db.ExecContext(ctx, query, id)
 	return err
 }
+
+func (a *AccountModel) Deposit(accountType string, amount float64, principal *Account) {
+
+}
+
+func (a *AccountModel) WithDraw(accountType string, amount float64, principal *Account) {
+
+}

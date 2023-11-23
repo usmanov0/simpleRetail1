@@ -25,13 +25,19 @@ func NewServices(db *sql.DB) *Services {
 type UserService interface {
 	CreateUser(ctx context.Context, user *model.Users) error
 	UpdateUser(ctx context.Context, user *model.Users) error
+	SaveUser(cts context.Context, user *model.Users) error
 	DeleteUser(ctx context.Context, id int) error
+	FindByUsername(ctx context.Context, username string) (*model.Users, error)
+	FindByEmail(ctx context.Context, email string) (*model.Users, error)
+	FindAllUsers(ctx context.Context) ([]*model.Users, error)
 }
 
 type AccountService interface {
 	CreateAccount(ctx context.Context, account *model.Account) error
 	UpdateAccount(ctx context.Context, account *model.Account) error
 	DeleteAccount(ctx context.Context, id int) error
+	Deposit(accountType string, amount float64, principal *model.Account)
+	WithDraw(accountType string, amount float64, principal *model.Account)
 }
 
 type TransactionService interface {
